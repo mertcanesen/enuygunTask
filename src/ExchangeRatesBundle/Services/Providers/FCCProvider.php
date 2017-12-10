@@ -27,12 +27,15 @@ class FCCProvider implements ProviderInterface
 
     /**
      * @return array
+     * @throws \Exception
      */
     public function request()
     {
-        $client = new Client([]);
-
-        $response = $client->request('GET', self::ENDPOINT);
+        try {
+            $response = $this->client->request('GET', self::ENDPOINT);
+        } catch (\Exception $exception) {
+            throw new \Exception("[FCCProvider] Whoops - something went wrong here.");
+        }
 
         return $this->parseResponse($response->getBody()->getContents());
     }
