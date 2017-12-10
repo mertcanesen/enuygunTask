@@ -34,7 +34,7 @@ class FCCProvider implements ProviderInterface
         try {
             $response = $this->client->request('GET', self::ENDPOINT);
         } catch (\Exception $exception) {
-            throw new \Exception("[FCCProvider] Whoops - something went wrong here.");
+            throw new \Exception("[FCCProvider:request] Whoops - something went wrong here.");
         }
 
         return $this->parseResponse($response->getBody()->getContents());
@@ -43,16 +43,21 @@ class FCCProvider implements ProviderInterface
     /**
      * @param string $data
      * @return array
+     * @throws \Exception
      */
     public function parseResponse($data)
     {
-        $responseObject = json_decode($data);
+        try {
+            $responseObject = json_decode($data);
 
-        $currencyArray = [
-            'USD' => $responseObject->USD_TRY,
-            'EUR' => $responseObject->EUR_TRY,
-        ];
+            $currencyArray = [
+                'USD' => $responseObject->USD_TRY,
+                'EUR' => $responseObject->EUR_TRY,
+            ];
 
-        return $currencyArray;
+            return $currencyArray;
+        } catch (\Exception $exception) {
+            throw new \InvalidArgumentException('[FCCProvider:parseResponse] Whoops - something went wrong here.');
+        }
     }
 }
