@@ -13,6 +13,18 @@ class FCCProvider implements ProviderInterface
 {
     const ENDPOINT = 'https://free.currencyconverterapi.com/api/v5/convert?q=USD_TRY,EUR_TRY&compact=ultra';
 
+    private $client;
+
+    /**
+     * TCMBProvider constructor.
+     * @param \GuzzleHttp\Client $client
+     */
+    public function __construct(Client $client)
+    {
+        $this->client = $client;
+    }
+
+
     /**
      * @return array
      */

@@ -13,14 +13,23 @@ class TCMBProvider implements ProviderInterface
 {
     const ENDPOINT = 'http://www.tcmb.gov.tr/kurlar/today.xml';
 
+    private $client;
+
+    /**
+     * TCMBProvider constructor.
+     * @param \GuzzleHttp\Client $client
+     */
+    public function __construct(Client $client)
+    {
+        $this->client = $client;
+    }
+
     /**
      * @return array
      */
     public function request()
     {
-        $client = new Client([]);
-
-        $response = $client->request('GET', self::ENDPOINT);
+        $response = $this->client->request('GET', self::ENDPOINT);
 
         return $this->parseResponse($response->getBody()->getContents());
     }
