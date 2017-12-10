@@ -1,0 +1,3 @@
+exchange_rates:
+    resource: "@ExchangeRatesBundle/Resources/config/routing.yml"
+    prefix:   /

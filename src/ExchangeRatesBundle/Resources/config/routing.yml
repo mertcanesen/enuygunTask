@@ -1,0 +1,3 @@
+exchange_rates_homepage:
+    path:     /
+    defaults: { _controller: ExchangeRatesBundle:Default:index }
