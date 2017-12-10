@@ -3,12 +3,8 @@
 namespace ExchangeRatesBundle\Command;
 
 use ExchangeRatesBundle\Entity\Currency;
-use ExchangeRatesBundle\Services\Providers\FCCProvider;
-use ExchangeRatesBundle\Services\Providers\TCMBProvider;
 use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
-use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
-use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 
 class ExchangeFetchCommand extends ContainerAwareCommand
@@ -31,11 +27,16 @@ class ExchangeFetchCommand extends ContainerAwareCommand
             ->setDescription('...');
     }
 
+    /**
+     * @param InputInterface  $input
+     * @param OutputInterface $output
+     * @return void
+     */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         $providers = [
-            new TCMBProvider(),
-            new FCCProvider(),
+            $this->getContainer()->get('exchange_rates.services_providers.tcmbprovider'),
+            $this->getContainer()->get('exchange_rates.services_providers.fccprovider'),
         ];
 
         foreach ($providers as $provider) {

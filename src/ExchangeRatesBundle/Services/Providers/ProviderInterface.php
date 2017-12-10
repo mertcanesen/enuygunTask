@@ -11,7 +11,8 @@ namespace ExchangeRatesBundle\Services\Providers;
 interface ProviderInterface
 {
     /**
-     * @return void
+     * @return array
+     * @throws \Exception
      */
     public function request();
 

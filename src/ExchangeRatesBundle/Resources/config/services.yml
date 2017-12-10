@@ -1,4 +1,11 @@
 services:
-#    exchange_rates.example:
-#        class: ExchangeRatesBundle\Example
-#        arguments: ["@service_id", "plain_value", "%parameter%"]
+  guzzle:
+    class: \GuzzleHttp\Client
+
+  exchange_rates.services_providers.tcmbprovider:
+    class: ExchangeRatesBundle\Services\Providers\TCMBProvider
+    arguments: ['@guzzle']
+
+  exchange_rates.services_providers.fccprovider:
+    class: ExchangeRatesBundle\Services\Providers\FCCProvider
+    arguments: ['@guzzle']
