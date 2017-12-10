@@ -41,10 +41,11 @@ class ExchangeFetchCommand extends ContainerAwareCommand
 
         foreach ($providers as $provider) {
             $currencyItems = $provider->request();
-
-            foreach ($currencyItems as $currencyKey => $currencyItem) {
-                if ($this->lastRates[$currencyKey] == 0 || $currencyItem < $this->lastRates[$currencyKey]) {
-                    $this->lastRates[$currencyKey] = $currencyItem;
+            if ($currencyItems !== null) {
+                foreach ($currencyItems as $currencyKey => $currencyItem) {
+                    if ($this->lastRates[$currencyKey] == 0 || $currencyItem < $this->lastRates[$currencyKey]) {
+                        $this->lastRates[$currencyKey] = $currencyItem;
+                    }
                 }
             }
         }

@@ -11,8 +11,7 @@ namespace ExchangeRatesBundle\Services\Providers;
 interface ProviderInterface
 {
     /**
-     * @return array
-     * @throws \Exception
+     * @return array|null Islem sirasinda hata olusursa null degeri doner.
      */
     public function request();
 

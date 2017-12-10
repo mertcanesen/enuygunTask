@@ -26,38 +26,31 @@ class FCCProvider implements ProviderInterface
 
 
     /**
-     * @return array
-     * @throws \Exception
+     * @return array|null Islem sirasinda hata olusursa null degeri doner.
      */
     public function request()
     {
         try {
             $response = $this->client->request('GET', self::ENDPOINT);
+            return $this->parseResponse($response->getBody()->getContents());
         } catch (\Exception $exception) {
-            throw new \Exception("[FCCProvider:request] Whoops - something went wrong here.");
+            return null;
         }
-
-        return $this->parseResponse($response->getBody()->getContents());
     }
 
     /**
      * @param string $data
      * @return array
-     * @throws \Exception
      */
     public function parseResponse($data)
     {
-        try {
-            $responseObject = json_decode($data);
+        $responseObject = json_decode($data);
 
-            $currencyArray = [
-                'USD' => $responseObject->USD_TRY,
-                'EUR' => $responseObject->EUR_TRY,
-            ];
+        $currencyArray = [
+            'USD' => $responseObject->USD_TRY,
+            'EUR' => $responseObject->EUR_TRY,
+        ];
 
-            return $currencyArray;
-        } catch (\Exception $exception) {
-            throw new \InvalidArgumentException('[FCCProvider:parseResponse] Whoops - something went wrong here.');
-        }
+        return $currencyArray;
     }
 }

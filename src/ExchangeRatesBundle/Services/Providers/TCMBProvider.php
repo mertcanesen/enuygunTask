@@ -25,48 +25,41 @@ class TCMBProvider implements ProviderInterface
     }
 
     /**
-     * @return array
-     * @throws \Exception
+     * @return array|null Islem sirasinda hata olusursa null degeri doner.
      */
     public function request()
     {
         try {
             $response = $this->client->request('GET', self::ENDPOINT);
+            return $this->parseResponse($response->getBody()->getContents());
         } catch (\Exception $exception) {
-            throw new \Exception("[TCMBProvider:request] Whoops - something went wrong here.");
+            //TODO[Mert Can ESEN] Hatali provider icin logger hazirlanmasi gerekiyor.
+            return null;
         }
-
-        return $this->parseResponse($response->getBody()->getContents());
     }
 
     /**
      * @param string $data
      * @return array
-     * @throws \Exception
      */
     public function parseResponse($data)
     {
-        try {
-            $responseObject = simplexml_load_string($data);
-            $currencyObjects = $responseObject->Currency;
+        $responseObject = simplexml_load_string($data);
+        $currencyObjects = $responseObject->Currency;
 
-            $currencyArray = [
-                'USD' => 0,
-                'EUR' => 0,
-            ];
+        $currencyArray = [
+            'USD' => 0,
+            'EUR' => 0,
+        ];
 
-            foreach ($currencyObjects as $currencyObject) {
-                if ($currencyObject['CurrencyCode'] == 'USD') {
-                    $currencyArray['USD'] = (float)$currencyObject->ForexBuying;
-                } elseif ($currencyObject['CurrencyCode'] == 'EUR') {
-                    $currencyArray['EUR'] = (float)$currencyObject->ForexBuying;
-                }
+        foreach ($currencyObjects as $currencyObject) {
+            if ($currencyObject['CurrencyCode'] == 'USD') {
+                $currencyArray['USD'] = (float)$currencyObject->ForexBuying;
+            } elseif ($currencyObject['CurrencyCode'] == 'EUR') {
+                $currencyArray['EUR'] = (float)$currencyObject->ForexBuying;
             }
-
-            return $currencyArray;
-
-        } catch (\Exception $exception) {
-            throw new \InvalidArgumentException('[TCMBProvider:parseResponse] Whoops - something went wrong here.');
         }
+
+        return $currencyArray;
     }
 }
