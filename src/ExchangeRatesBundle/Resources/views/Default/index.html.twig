@@ -1,1 +1,7 @@
-Hello World!
+{% if currency is defined %}
+    <b>{{ currency.createdAt|date("d/m/Y") }}</b> Günü Saat <b>{{ currency.createdAt|date("H:i:s") }}</b>'da Belirlenen Gösterge Niteliğindeki Kurlar:<br/>
+    <p>
+        <span>USD {{ currency.usd }}</span><br />
+        <span>EURO {{ currency.eur }}</span><br />
+    </p>
+{% endif %}
